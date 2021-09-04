@@ -25,7 +25,7 @@ app.get('/posts/:id/comments', (request, response) => {
 });
 
 // the post request
-app.post('/posts/:id/comments', async (request, response) => {
+app.post('/posts/:id/comments', async(request, response) => {
 // create a new comment; we are going to store all of our comments in an in-memory data structure
 
     // first generate a new random comment id and convert it to a hexadecimal string
@@ -72,10 +72,33 @@ app.post('/posts/:id/comments', async (request, response) => {
 // add a post request handler even though the comment service doesn't care about
 // any events that are sent/emitted by the event-bus broker, so just console.log
 // the event
-app.post('/events', async (request, response) => {
+app.post('/events', async(request, response) => {
     console.log('Comments Received Event: ', request.body.type);
 
-   // const {type,data} = request.body;
+    const {type,data} = request.body;
+
+    if (type ==='CommentModerated'){
+        const {postId, id, status, content} = data;
+
+        const comments = commentsByPostId[postId];
+        const comment = comments.find(comment => {
+            return comment.id === id;
+        });
+        comment.status = status;
+
+        // emit a CommentUpdated event to the Event-Bus
+        await axios.post('http://localhost:4005/events',{
+            type: 'CommentUpdated',
+            data: {
+                id,
+                status,
+                postId,
+                content
+            }
+        }).catch((err) => {
+            console.log(err.message);
+        });
+    }    
 
     // respond to the event that was received by sending back an empty object to
     // indicate that everything is good.

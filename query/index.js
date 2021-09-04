@@ -65,10 +65,8 @@ app.post('/events',(request, response) => {
         post.comments.push({ id, content, status});
     } 
 
-
-    /*
-
     if (type === 'CommentUpdated') {
+        // destructure the data coming in from the request body
         const { id, content, postId, status } = data;
 
         const post = posts[postId];
@@ -80,7 +78,7 @@ app.post('/events',(request, response) => {
         comment.content = content;
         
     }
-*/
+ 
     // print out the posts data structure
     console.log(posts);
 
