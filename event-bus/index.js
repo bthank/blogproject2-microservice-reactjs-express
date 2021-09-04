@@ -22,9 +22,9 @@ app.post('/events', (request, response) => {
     axios.post('http://localhost:4002/events', event).catch((err) => {
         console.log(err.message); // is the query service
     });
-  //  axios.post('http://localhost:4003/events', event).catch((err) => {
-  //      console.log(err.message); // is the comment moderation service
-  //  });
+    axios.post('http://localhost:4003/events', event).catch((err) => {
+        console.log(err.message); // is the comment moderation service
+    });
     response.send({ status: 'OK' }); // send this back to indicate all went as expected
 });
 

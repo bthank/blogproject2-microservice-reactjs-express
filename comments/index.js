@@ -39,7 +39,7 @@ app.post('/posts/:id/comments', async (request, response) => {
     const comments = commentsByPostId[request.params.id] || []; 
 
     // then push the current id and request body content onto the comments array
-    comments.push({ id: commentId, content });
+    comments.push({ id: commentId, content, status: 'Pending' });
 
     // reassign this comments array back to the given post inside our commentsByPostId object
     commentsByPostId[request.params.id] = comments;
@@ -51,11 +51,13 @@ app.post('/posts/:id/comments', async (request, response) => {
         //     1) a comment id
         //     2) comment content
         //     3) post id that owns this comment
+        //     4) status of Pending initially
         type: 'CommentCreated',
         data: {
             id: commentId,
             content,
-            postId: request.params.id
+            postId: request.params.id,
+            status: 'Pending'
         }
 
     }).catch((err) => {
